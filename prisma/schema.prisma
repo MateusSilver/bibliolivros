@@ -12,3 +12,102 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Tipo {
+  LIVRO
+  REVISTA
+  QUADRINHO
+}
+
+enum Aquisicao {
+  TENHO
+  EMPRESTADO
+  DESEJADO
+}
+
+enum Status {
+  LIDO
+  RELENDO
+  LENDO
+  ABANDONADO
+  QUEROLER
+}
+
+model usuarios {
+  id       String     @id @default(uuid())
+  nome     String
+  leituras leituras[]
+}
+
+model editoras {
+  id       String    @id @default(uuid())
+  nome     String
+  historia String
+  titulos  titulos[]
+}
+
+model autores {
+  id       String    @id @default(uuid())
+  nome     String
+  historia String
+  titulos  titulos[]
+}
+
+model series {
+  id      String    @id @default(uuid())
+  titulo  String
+  titulos titulos[]
+}
+
+model titulos {
+  id             String   @id @default(uuid())
+  titulo         String
+  tipo           Tipo
+  paginas        Int
+  edicao         String
+  numeracaoSerie Int?
+  sinopse        String
+  imageURLs      String[]
+
+  editoraId String
+  autorId   String
+  serieId   String
+
+  editora   editoras    @relation(fields: [editoraId], references: [id])
+  autor     autores     @relation(fields: [autorId], references: [id])
+  serie     series      @relation(fields: [serieId], references: [id])
+  boxLivros boxLivros[]
+  leituras  leituras[]
+}
+
+model boxes {
+  id        String      @id @default(uuid())
+  nome      String
+  boxLivros boxLivros[]
+}
+
+model boxLivros {
+  id String @id @default(uuid())
+
+  tituloId String
+  boxId    String
+
+  titulo titulos @relation(fields: [tituloId], references: [id])
+  box    boxes   @relation(fields: [boxId], references: [id])
+}
+
+model leituras {
+  id            String     @id @default(uuid())
+  nota          Int?
+  aquisicao     Aquisicao?
+  statusLeitura Status?
+  vezesLido     Int?
+  favorito      Boolean?
+  resenha       String?
+
+  tituloId  String
+  usuarioId String
+
+  titulo  titulos  @relation(fields: [tituloId], references: [id])
+  usuario usuarios @relation(fields: [usuarioId], references: [id])
+}
