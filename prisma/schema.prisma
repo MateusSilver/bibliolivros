@@ -50,6 +50,7 @@ model autores {
   id       String    @id @default(uuid())
   nome     String
   historia String
+  imageURL String?
   titulos  titulos[]
 }
 
@@ -67,15 +68,15 @@ model titulos {
   edicao         String
   numeracaoSerie Int?
   sinopse        String
-  imageURLs      String[]
+  imageURLs      String
 
   editoraId String
   autorId   String
-  serieId   String
+  serieId   String?
 
   editora   editoras    @relation(fields: [editoraId], references: [id])
   autor     autores     @relation(fields: [autorId], references: [id])
-  serie     series      @relation(fields: [serieId], references: [id])
+  serie     series?      @relation(fields: [serieId], references: [id])
   boxLivros boxLivros[]
   leituras  leituras[]
 }
