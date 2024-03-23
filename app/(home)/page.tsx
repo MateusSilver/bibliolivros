@@ -13,11 +13,26 @@ export default async function Home() {
     <main>
       <div className="mx-3 my-4">
         <h2 className="my-3 text-xl uppercase">Todos os livros</h2>
-        <div className="my-4 flex flex-nowrap gap-2 overflow-x-auto">
-          {livros.map((livro) => (
-            <LivroItem titulo={livro} key={livro.id} />
-          ))}
-        </div>
+        <table className="m-3 w-full table-auto border-collapse border border-primary">
+          <thead>
+            <tr>
+              <th className="border border-slate-400">
+                <p className="text-start">Capa</p>
+              </th>
+              <th className="border border-slate-400">
+                <p className="text-start">Nome</p>
+              </th>
+              <th className="border border-slate-400">
+                <p className="text-start">Autor</p>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {livros.map((livro) => (
+              <LivroItem titulo={livro} key={livro.id} />
+            ))}
+          </tbody>
+        </table>
       </div>
     </main>
   );
